@@ -6,7 +6,7 @@
   use Drupal\Core\State;
   use Drupal\user\Entity\Role;
   use Drupal\user;
-
+  use Drupal\Core\Config;
   /**
    * @file
    * Security check module functions.
@@ -21,7 +21,6 @@
     $admin_role = security_check_determine_admin_role();
     $permissions = security_check_get_permissions();
     $modules = security_check_get_modules();
-print_r($admin_role);
     try {
       $updates = security_check_get_updates();
     }
@@ -67,16 +66,8 @@ print_r($admin_role);
    * Make a best effort attempt to determine the admin role.
    */
   function security_check_determine_admin_role() {
-    $by_var = \Drupal::config('system.site')->get('user_admin',1);
-    print_r($by_var);
-    //if (!empty($by_var)) {
-      return $by_var;
-    //}
-    // Assume the admin user has the highest level of privileges.
-    // $connection = \Drupal::database();
-    // $query = db_query_range('SELECT rid, COUNT(rid) FROM {role_permission} GROUP BY rid ORDER BY COUNT(rid) DESC', 0, 1,[]);
-    // $result = $query->fetchField();
-    // return $result;
+    $by_var = \Drupal::config('user.role.administrator')->get('id');
+    return $by_var;
   }
 
   /**
